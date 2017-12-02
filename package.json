@@ -1,0 +1,28 @@
+{
+  "name": "next-muni",
+  "version": "0.0.1",
+  "description": "Serves next KT that stops at given stopId",
+  "engines": {
+    "node": "6.11.1"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "xml2js": "^0.4.19"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajay-gandhi/next-muni.git"
+  },
+  "keywords": [
+    "muni",
+    "sf",
+    "nextbus"
+  ],
+  "license": "MIT"
+}
