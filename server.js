@@ -12,11 +12,7 @@ app.set('port', (process.env.PORT || 8000));
 
 const base = 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=sf-muni&stopId=';
 app.post('/kt', function (req, res) {
-  console.log(req);
-  console.log('\n\n------\n\n');
-  console.log(req.body);
-  /*
-  rp(base + req.query.stopId)
+  rp(base + req.body.result.parameters.direction)
   .then((response) => {
     parseString(response, (err, result) => {
       if (err) {
@@ -32,7 +28,6 @@ app.post('/kt', function (req, res) {
   .catch(() => {
     res.send("error");
   });
-  */
 });
 
 app.listen(app.get('port'), function () {
