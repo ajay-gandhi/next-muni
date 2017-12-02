@@ -3,7 +3,7 @@
 const express       = require('express'),
       bodyParser    = require('body-parser'),
       rp            = require('request-promise'),
-      DialogflowApp = require('actions-on-google').DialogflowApp;
+      DialogflowApp = require('actions-on-google').DialogflowApp,
       parseString   = require('xml2js').parseString;
 
 // Set up express
