@@ -1,16 +1,21 @@
 'use strict';
 
 const express     = require('express'),
+      bodyParser  = require('body-parser'),
       rp          = require('request-promise'),
       parseString = require('xml2js').parseString;
 
 // Set up express
 const app = express();
+app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 8000));
 
 const base = 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=sf-muni&stopId=';
-app.get('/kt', function (req, res) {
+app.post('/kt', function (req, res) {
   console.log(req);
+  console.log('\n\n------\n\n');
+  console.log(req.body);
+  /*
   rp(base + req.query.stopId)
   .then((response) => {
     parseString(response, (err, result) => {
@@ -27,6 +32,7 @@ app.get('/kt', function (req, res) {
   .catch(() => {
     res.send("error");
   });
+  */
 });
 
 app.listen(app.get('port'), function () {
