@@ -11,7 +11,7 @@ const app = express();
 app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 8000));
 
-const WELCOME_INTENT = 'input.welcome';
+const WELCOME_INTENT = 'input.direction';
 const base = 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=sf-muni&stopId=';
 
 app.post('/kt', function (req, res) {
@@ -39,7 +39,8 @@ app.post('/kt', function (req, res) {
 });
 
 function welcomeIntent(app) {
-  rp(base + app.getArgument(WELCOME_INTENT))
+  console.log('got argument', app.getArgument(WELCOME_ARGUMENT));
+  rp(base + app.getArgument(WELCOME_ARGUMENT))
     .then((response) => {
       parseString(response, (err, result) => {
         if (err) {
