@@ -11,7 +11,7 @@ const app = express();
 app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 8000));
 
-const WELCOME_INTENT = 'input.direction';
+const WELCOME_ARGUMENT = 'input.direction';
 const base = 'http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=sf-muni&stopId=';
 
 app.post('/kt', function (req, res) {
