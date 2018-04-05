@@ -32,7 +32,8 @@ app.get("/", function (req, res) {
         res.end();
       });
     })
-    .catch(() => {
+    .catch((err) => {
+      LOG.log(err);
       res.send("error");
   });
 });
