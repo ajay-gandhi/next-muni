@@ -18,21 +18,22 @@ const base = "http://webservices.nextbus.com/service/publicXMLFeed?command=predi
 
 app.get("/", function (req, res) {
   rp(base + req.query.stopId)
-  .then((response) => {
-    parseString(response, (err, result) => {
-      if (err) {
-        console.error(err);
-        res.end();
-      }
+    .then((response) => {
+      parseString(response, (err, result) => {
+        if (err) {
+          LOG.log(err);
+          res.end();
+        }
 
-      const predictions = result.body.predictions[0].direction.shift().prediction;
-      const firstPrediction = predictions[0].$.minutes;
-      say(`The next train will be in ${firstPrediction} minutes`);
-      res.end();
-    });
-  })
-  .catch(() => {
-    res.send("error");
+        const directions = result.body.predictions[0].direction;
+        const closestTrain = directions.reduce((memo, d) => d.prediction[0].$.minutes < memo ? d.prediction[0].$.minutes : memo);
+        say(`The next train will be in ${closestTrain} minutes`);
+        LOG.log(`Received request, next train in ${closestTrain} minutes`);
+        res.end();
+      });
+    })
+    .catch(() => {
+      res.send("error");
   });
 });
 
