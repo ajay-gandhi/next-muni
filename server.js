@@ -26,7 +26,7 @@ app.get("/", function (req, res) {
         }
 
         const directions = result.body.predictions[0].direction;
-        const closestTrain = directions.reduce((memo, d) => d.prediction[0].$.minutes < memo ? d.prediction[0].$.minutes : memo);
+        const closestTrain = directions.reduce((memo, d) => d.prediction[0].$.minutes < memo ? d.prediction[0].$.minutes : memo, 99);
         say(`The next train will be in ${closestTrain} minutes`);
         LOG.log(`Received request, next train in ${closestTrain} minutes`);
         res.end();
@@ -41,11 +41,13 @@ app.get("/", function (req, res) {
 app.listen(PORT, () => LOG.log(`Serving on port ${PORT}`));
 
 function say (str) {
-  const tts = spawn("espeak", ["--stdout", str]);
-  const audioFile = fs.createWriteStream("/home/ajay/projects/next-muni/audio.wav");
-
-  tts.stdout.pipe(audioFile);
-  tts.on("close", (code) => {
-    spawn("castnow", ["--address", IP, "/home/ajay/projects/next-muni/audio.wav"]);
-  });
+  try {
+    const safeStr = str.replace(/[^A-Za-z0-9 ]/g, '');
+    const nodePath = "/home/ajay/.nvm/versions/node/v9.10.1/bin/node";
+    const castnowPath = "/home/ajay/.nvm/versions/node/v9.10.1/bin/castnow";
+    const cmd = spawn("sh", ["-c", `espeak --stdout "${safeStr}" | ${nodePath} ${castnowPath} --address ${IP} -`]);
+    cmd.stderr.on("data", s => LOG.log(s.toString()));
+  } catch (err) {
+    LOG.log(err.toString());
+  }
 }
