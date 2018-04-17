@@ -25,10 +25,20 @@ app.get("/", function (req, res) {
           res.end();
         }
 
+        // Get the 2 closest trains
         const directions = result.body.predictions[0].direction;
-        const closestTrain = directions.reduce((memo, d) => d.prediction[0].$.minutes < memo ? d.prediction[0].$.minutes : memo, 99);
-        say(`The next train will be in ${closestTrain} minutes`);
-        LOG.log(`Received request, next train in ${closestTrain} minutes`);
+        const closestTrains = directions.reduce((memo, d) => {
+          const f = d.prediction[0].$.seconds;
+          const s = d.prediction[1].$.seconds;
+
+          if (f < memo[0])      return [f, s < memo[1] ? s : memo[1]];
+          else if (f < memo[1]) return [memo[0], f];
+          else                  return memo;
+        }, [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]);
+        const ctWithAdj = closestTrains.map(s => Math.floor((parseInt(s) - 20) / 60));
+        const answer = `The next train will be in ${ctWithAdj[0]} minutes, then ${ctWithAdj[1]} minutes`;
+        say(answer);
+        LOG.log(answer);
         res.end();
       });
     })
