@@ -35,7 +35,7 @@ app.get("/", function (req, res) {
           else if (f < memo[1]) return [memo[0], f];
           else                  return memo;
         }, [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]);
-        const ctWithAdj = closestTrains.map(s => Math.floor((parseInt(s) - 20) / 60));
+        const ctWithAdj = closestTrains.map(s => Math.floor((parseInt(s) - 15) / 60));
         const answer = `The next train will be in ${ctWithAdj[0]} minutes, then ${ctWithAdj[1]} minutes`;
         say(answer);
         LOG.log(answer);
