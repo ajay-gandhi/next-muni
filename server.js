@@ -36,7 +36,7 @@ app.get("/", function (req, res) {
           else                  return memo;
         }, [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]);
         const ctWithAdj = closestTrains.map(s => Math.floor((parseInt(s) - 15) / 60));
-        const answer = `The next train will be in ${ctWithAdj[0]} minutes, then ${ctWithAdj[1]} minutes`;
+        const answer = `It is ${now()}. The next train will be in ${ctWithAdj[0]} minutes, then ${ctWithAdj[1]} minutes`;
         say(answer);
         LOG.log(answer);
         res.end();
@@ -60,4 +60,10 @@ function say (str) {
   } catch (err) {
     LOG.log(err.toString());
   }
+}
+
+function now () {
+  const ts = new Date();
+  const m = ts.getMinutes() < 10 ? `o${ts.getMinutes()}` : ts.getMinutes();
+  return `${ts.getHours()}${m}`;
 }
