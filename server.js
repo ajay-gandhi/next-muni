@@ -64,6 +64,6 @@ function say (str) {
 
 function now () {
   const ts = new Date();
-  const m = ts.getMinutes() < 10 ? `o${ts.getMinutes()}` : ts.getMinutes();
-  return `${ts.getHours()}${m}`;
+  const minPrefix = ts.getMinutes() < 10 ? "o" : ":";
+  return `${ts.getHours()}${minPrefix}${ts.getMinutes()}`;
 }
