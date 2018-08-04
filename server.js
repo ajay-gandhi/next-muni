@@ -53,8 +53,8 @@ app.listen(PORT, () => LOG.log(`Serving on port ${PORT}`));
 function say (str) {
   try {
     const safeStr = str.replace(/[^A-Za-z0-9 ]/g, '');
-    const nodePath = "/home/ajay/.nvm/versions/node/v9.10.1/bin/node";
-    const castnowPath = "/home/ajay/.nvm/versions/node/v9.10.1/bin/castnow";
+    const nodePath = "/home/ajay/.nvm/versions/node/v10.6.0/bin/node";
+    const castnowPath = "/home/ajay/.nvm/versions/node/v10.6.0/bin/castnow";
     const cmd = spawn("sh", ["-c", `espeak --stdout "${safeStr}" | ${nodePath} ${castnowPath} --address ${IP} -`]);
     cmd.stderr.on("data", s => LOG.log(s.toString()));
   } catch (err) {
@@ -64,6 +64,7 @@ function say (str) {
 
 function now () {
   const ts = new Date();
-  const minPrefix = ts.getMinutes() < 10 ? "o" : ":";
-  return `${ts.getHours()}${minPrefix}${ts.getMinutes()}`;
+  const minPrefix = ts.getMinutes() < 10 ? "o" : " ";
+  const hours = ts.getHours() > 12 ? ts.getHours() - 12 : ts.getHours();
+  return `${hours}${minPrefix}${ts.getMinutes()}`;
 }
