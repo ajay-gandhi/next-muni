@@ -3,16 +3,14 @@ const parseString = require("xml2js").parseString;
 const fs = require("fs");
 const spawn = require("child_process").spawn;
 
-const IP = "192.168.128.4";
-
 const base = "http://webservices.nextbus.com/service/publicXMLFeed?command=predictions&a=sf-muni&stopId=";
 
-module.exports = (stopId) => {
+module.exports = (stopId, ip) => {
   return rp(`${base}${stopId}`)
     .then((response) => {
       parseString(response, (err, result) => {
         if (err) {
-          say("Error parsing XML");
+          say("Error parsing XML", ip);
         }
 
         // Get the 2 closest trains
@@ -27,15 +25,15 @@ module.exports = (stopId) => {
         }, [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]);
         const ctWithAdj = closestTrains.map(s => Math.floor((parseInt(s) - 15) / 60));
         const answer = `It is ${now()}. The next train will be in ${ctWithAdj[0]} minutes, then ${ctWithAdj[1]} minutes`;
-        say(answer);
+        say(answer, ip);
       });
     })
     .catch((err) => {
-      say("Error in requesting data");
+      say("Error in requesting data", ip);
     });
 };
 
-const say = (str) => {
+const say = (str, ip) => {
   const safeStr = str.replace(/[^A-Za-z0-9 ]/g, '');
   const nodePath = "/home/ajay/.nvm/versions/node/v10.6.0/bin/node";
   const castnowPath = "/home/ajay/.nvm/versions/node/v10.6.0/bin/castnow";
